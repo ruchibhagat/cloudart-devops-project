@@ -1,0 +1,6 @@
+services:
+  cloudart:
+    build: .
+    container_name: cloudart-container
+    ports:
+      - "5000:5000"
