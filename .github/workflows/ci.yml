@@ -46,10 +46,10 @@ jobs:
            password:  ${{ secrets.DOCKERHUB_TOKEN }}    
 
       -  name: Build docker image
-         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:latest .    
+         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }} .    
 
       -  name: Push docker image
-         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:latest   
+         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }}   
 
   deploy:
     runs-on: ubuntu-latest
@@ -63,10 +63,10 @@ jobs:
            username:  ${{ secrets.EC2_USERNAME }}
            key: ${{ secrets.EC2_SSH_KEY }}
            script: | 
-             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:latest
+             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }}
              docker stop cloudcart || true
              docker rm cloudcart || true
              docker run -d \
              --name cloudcart \
              -p 5000:5000 \
-             ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:latest
+             ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }}
