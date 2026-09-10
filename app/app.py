@@ -8,7 +8,8 @@ def home():
     products = [
         {"name": "Laptop", "price": 999},
         {"name": "Phone", "price": 699},
-        {"name": "Headphones", "price": 199}
+        {"name": "Headphones", "price": 249},
+        {"name": "charger", "price": 199}
     ]
 
     return render_template("index.html", products=products)
