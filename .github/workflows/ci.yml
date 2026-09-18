@@ -8,12 +8,12 @@ on:
     branches:
       - main
 
-  workflow_dispatch:    
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -25,37 +25,46 @@ jobs:
       - name: install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r app/requirements.txt 
+          pip install -r app/requirements.txt
           pip install -r app/requirements-dev.txt
 
       - name: run tests
-        run:  pytest 
+        run:  pytest
 
-  docker: 
+  docker:
     runs-on: ubuntu-latest
     needs: test
 
-    steps: 
+    steps:
       -  name: Checkout code
          uses: actions/checkout@v4
 
       -  name: Login to dockerhub
          uses: docker/login-action@v3
-         with: 
-           username:  ${{ secrets.DOCKERHUB_USERNAME }} 
-           password:  ${{ secrets.DOCKERHUB_TOKEN }}    
+         with:
+           username:  ${{ secrets.DOCKERHUB_USERNAME }}
+           password:  ${{ secrets.DOCKERHUB_TOKEN }}
 
       -  name: Build docker image
-         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }} .    
+         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }} .
 
       -  name: Push docker image
-         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }}   
+         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cloudart:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: docker
 
     steps:
+      - name: Validate SSH key format
+        shell: bash
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          echo "Checking SSH key format..."
+          echo "$SSH_KEY" | head -n 1
+          echo "$SSH_KEY" | tail -n 1
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.2
         with:
