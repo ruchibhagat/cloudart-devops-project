@@ -56,14 +56,6 @@ jobs:
     needs: docker
 
     steps:
-      - name: Validate SSH key format
-        shell: bash
-        env:
-          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-        run: |
-          echo "Checking SSH key format..."
-          echo "$SSH_KEY" | head -n 1
-          echo "$SSH_KEY" | tail -n 1
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.2
