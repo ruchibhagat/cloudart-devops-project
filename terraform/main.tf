@@ -56,7 +56,7 @@ resource "aws_security_group" "cloudcart" {
 }
 
 resource "aws_instance" "cloudcart" {
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = "ami-088b477832f79ec8f"
   instance_type = "t3.micro"
   key_name      = "cloudcartkey"
 
