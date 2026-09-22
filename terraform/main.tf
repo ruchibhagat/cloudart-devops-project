@@ -42,8 +42,8 @@ resource "aws_security_group" "cloudcart" {
 
 resource "aws_instance" "cloudcart" {
   ami           = "ami-088b477832f79ec8f"
-  instance_type = "t3.micro"
-  key_name      = "cloudcartkey"
+  instance_type = var.instance_type
+  key_name      = var.key_name
 
   vpc_security_group_ids = [aws_security_group.cloudcart.id
   ]

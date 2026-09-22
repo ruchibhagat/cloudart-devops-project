@@ -3,3 +3,15 @@ variable "aws_region" {
   type        = string
   default     = "ca-central-1"
 }
+
+variable "instance_type" {
+  description = "Ec2 instance type for cloudcart"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "key_name" {
+  description = "EC2 key pair name"
+  type        = string
+  default     = "cloudcartkey"
+}
