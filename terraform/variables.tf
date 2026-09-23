@@ -15,3 +15,9 @@ variable "key_name" {
   type        = string
   default     = "cloudcartkey"
 }
+
+variable "allowed_ssh_cidr" {
+  description = "CIDR block allowed to access SSH"
+  type        = string
+  default     = "0.0.0.0/0"
+}
